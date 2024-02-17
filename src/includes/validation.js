@@ -55,7 +55,8 @@ export default {
           ? messages[ctx.rule.name]
           : `The field ${ctx.field} is invalid`
         return message
-      }
+      },
+      validateOnInput: true
     })
   }
 }

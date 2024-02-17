@@ -53,24 +53,28 @@
           </ul>
 
           <!-- Login Form -->
-          <form v-show="tab === 'login'">
+          <vee-form v-show="tab === 'login'" @submit="login" :validation-schema="loginSchema">
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input
+              <vee-field
                 type="email"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email"
+                name="email"
               />
+              <ErrorMessage class="text-red-600" name="email" />
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input
+              <vee-field
                 type="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Password"
+                name="password"
               />
+              <ErrorMessage class="text-red-600" name="password" />
             </div>
             <button
               type="submit"
@@ -78,7 +82,14 @@
             >
               Submit
             </button>
-          </form>
+          </vee-form>
+          <div
+            class="text-white text-center font-bold p-4 rounded mb-4"
+            v-if="reg_show_alert"
+            :class="reg_alert_variant"
+          >
+            {{ reg_alert_message }}
+          </div>
           <!-- Registration Form -->
           <vee-form
             v-show="tab === 'register'"
@@ -173,6 +184,7 @@
             <button
               type="submit"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
+              :disabled="reg_in_submission"
             >
               Submit
             </button>
@@ -201,9 +213,17 @@ export default {
         country: 'required|country_excluded:Antarctica',
         tos: 'tos'
       },
+      loginSchema: {
+        email: 'required|email',
+        password: 'required'
+      },
       userData: {
         country: 'USA'
-      }
+      },
+      reg_in_submission: false,
+      reg_show_alert: false,
+      reg_alert_variant: 'bg-blue-500',
+      reg_alert_message: 'Please Wait! Your Account is being created'
     }
   },
   computed: {
@@ -214,6 +234,16 @@ export default {
   },
   methods: {
     register(value) {
+      this.reg_show_alert = true
+      this.reg_in_submission = true
+      this.reg_alert_variant = 'bg-blue-500'
+      this.reg_alert_message = 'Please Wait! Your Account is being created'
+
+      this.reg_alert_variant = 'bg-green-500'
+      this.reg_alert_message = 'Success! Your Account is created'
+      console.log(value)
+    },
+    login(value) {
       console.log(value)
     }
   },
